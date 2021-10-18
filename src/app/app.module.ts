@@ -13,6 +13,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSortModule } from '@angular/material/sort';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 @NgModule({
               declarations: [
@@ -31,6 +32,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
                   MatSelectModule,
                   MatSortModule,
                   MatExpansionModule,
+                  MatSnackBarModule
               ],
               providers:    [],
               bootstrap:    [AppComponent]

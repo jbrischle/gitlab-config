@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { GitlabService } from './gitlab.service';
 import { interval } from 'rxjs';
+import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
 
 @Component({
                selector:    'app-root',
@@ -38,7 +39,7 @@ export class AppComponent implements OnInit {
 
     projectApprovalRuleDefault: string = '{\n'
                                          + '    "group_ids":["848"],\n'
-                                         + '    "name": "intern",\n'
+                                         + '    "name": "arch",\n'
                                          + '    "approvals_required": 2\n'
                                          + '}';
 
@@ -49,7 +50,13 @@ export class AppComponent implements OnInit {
     projectApprovals = '';
     projectApprovalRule = '';
 
-    constructor(private readonly gitlab: GitlabService) {
+    snackBarConfig: MatSnackBarConfig = {
+        duration:           500,
+        horizontalPosition: 'center',
+        verticalPosition:   'bottom'
+    };
+
+    constructor(private readonly gitlab: GitlabService, private readonly SNACK_BAR: MatSnackBar) {
     }
 
     ngOnInit(): void {
@@ -69,8 +76,18 @@ export class AppComponent implements OnInit {
         interval(50000).subscribe(value => this.saveValueToLocalStorage());
     }
 
-    initData(): void {
-        this.gitlab.getProjectsInGroup(this.gitlabUrl, this.gitlabApiKey, this.groupId).subscribe(projects => console.log(projects));
+    saveSettings(): void {
+        this.gitlab.getProjectsInGroup(this.gitlabUrl, this.gitlabApiKey, this.groupId).subscribe(response => {
+            const projects: any[] = response.body;
+
+            projects.forEach(project => {
+                this.gitlab.updateProjectSettings(this.gitlabUrl, this.gitlabApiKey, project.id, this.projectSettings).subscribe();
+                this.gitlab.updateProjectMergeApprovals(this.gitlabUrl, this.gitlabApiKey, project.id, this.projectApprovals).subscribe();
+                this.gitlab.createProjectApprovalRules(this.gitlabUrl, this.gitlabApiKey, project.id, this.projectApprovalRule).subscribe();
+            });
+
+            this.SNACK_BAR.open(`${projects.length} projects settings updated`, 'close', this.snackBarConfig);
+        });
     }
 
     private saveValueToLocalStorage(): void {

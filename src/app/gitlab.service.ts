@@ -11,7 +11,7 @@ export class GitlabService {
     }
 
     public getProjectsInGroup(backendUrl: string = '', apiKey: string = '', groupId: string = ''): Observable<any> {
-        const headers: HttpHeaders = new HttpHeaders().set('PRIVATE-TOKEN', apiKey);
+        const headers: HttpHeaders = new HttpHeaders().set('PRIVATE-TOKEN', apiKey).set('Content-Type', 'application/json');
         return this.http.get<any>(backendUrl + `groups/${groupId}/projects?archived=false&include_subgroups=false&simple=true`, {
             headers,
             observe: 'response'
@@ -20,34 +20,53 @@ export class GitlabService {
 
     public updateProjectSettings(backendUrl: string = '', apiKey: string = '', projectId: string = '',
                                  settings: string = ''): Observable<any> {
-        const headers: HttpHeaders = new HttpHeaders().set('PRIVATE-TOKEN', apiKey);
+        const headers: HttpHeaders = new HttpHeaders().set('PRIVATE-TOKEN', apiKey).set('Content-Type', 'application/json');
         return this.http.put<any>(
-            backendUrl + `projects/${projectId}`, {
+            backendUrl + `projects/${projectId}`, settings, {
                 headers,
                 observe: 'response',
-
             });
     }
 
     public updateProjectMergeApprovals(backendUrl: string = '', apiKey: string = '', projectId: string = '',
                                        settings: string = ''): Observable<any> {
-        const headers: HttpHeaders = new HttpHeaders().set('PRIVATE-TOKEN', apiKey);
+        const headers: HttpHeaders = new HttpHeaders().set('PRIVATE-TOKEN', apiKey).set('Content-Type', 'application/json');
         return this.http.post<any>(
-            backendUrl + `projects/${projectId}/approvals`, {
+            backendUrl + `projects/${projectId}/approvals`, settings, {
                 headers,
                 observe: 'response',
-
             });
     }
 
-    public updateProjectApprovalRules(backendUrl: string = '', apiKey: string = '', projectId: string = '',
-                                      settings: string = ''): Observable<any> {
-        const headers: HttpHeaders = new HttpHeaders().set('PRIVATE-TOKEN', apiKey);
+    public createProjectApprovalRules(backendUrl: string = '', apiKey: string = '', projectId: string = '',
+                                      settings: any = ''): Observable<any> {
+        const headers: HttpHeaders = new HttpHeaders().set('PRIVATE-TOKEN', apiKey).set('Content-Type', 'application/json');
+
         return this.http.post<any>(
+            backendUrl + `projects/${projectId}/approval_rules`, settings, {
+                headers,
+                observe: 'response',
+            });
+    }
+
+    private getProjectApprovalRules(backendUrl: string = '', apiKey: string = '', projectId: string = ''): Observable<any> {
+        const headers: HttpHeaders = new HttpHeaders().set('PRIVATE-TOKEN', apiKey).set('Content-Type', 'application/json');
+
+        return this.http.get<any>(
             backendUrl + `projects/${projectId}/approval_rules`, {
                 headers,
                 observe: 'response',
+            });
+    }
 
+    private updateProjectApprovalRules(backendUrl: string = '', apiKey: string = '', projectId: string = '',
+                                       settings: any = '', approvalRuleId: string = ''): Observable<any> {
+        const headers: HttpHeaders = new HttpHeaders().set('PRIVATE-TOKEN', apiKey).set('Content-Type', 'application/json');
+
+        return this.http.put<any>(
+            backendUrl + `projects/${projectId}/approval_rules/${approvalRuleId}`, settings, {
+                headers,
+                observe: 'response',
             });
     }
 }
