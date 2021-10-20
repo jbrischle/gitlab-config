@@ -12,10 +12,12 @@ export class GitlabService {
 
     public getProjectsInGroup(backendUrl: string = '', apiKey: string = '', groupId: string = ''): Observable<any> {
         const headers: HttpHeaders = new HttpHeaders().set('PRIVATE-TOKEN', apiKey).set('Content-Type', 'application/json');
-        return this.http.get<any>(backendUrl + `groups/${groupId}/projects?archived=false&include_subgroups=false&simple=true`, {
-            headers,
-            observe: 'response'
-        });
+        return this.http
+                   .get<any>(backendUrl + `groups/${groupId}/projects?archived=false&include_subgroups=false&simple=true&per_page=100`,
+                             {
+                                 headers,
+                                 observe: 'response'
+                             });
     }
 
     public updateProjectSettings(backendUrl: string = '', apiKey: string = '', projectId: string = '',
