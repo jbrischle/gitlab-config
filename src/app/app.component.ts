@@ -14,7 +14,7 @@ export class AppComponent implements OnInit {
                                      + '    "packages_enabled": true,\n'
                                      + '    "visibility": "internal",\n'
                                      + '    "issues_access_level": "disabled",\n'
-                                     + '    "merge_method" : "rebase_merge",\n'
+                                     + '    "merge_method" : "merge",\n'
                                      + '    "merge_requests_enabled": true,\n'
                                      + '    "wiki_access_level": "disabled",\n'
                                      + '    "builds_access_level": "enabled",\n'
