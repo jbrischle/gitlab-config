@@ -7,12 +7,10 @@
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
-          "style": "scss",
-          "name": ""
+          "style": "scss"
         },
         "@schematics/angular:application": {
-          "strict": true,
-          "name": ""
+          "strict": true
         }
       },
       "root": "",
@@ -130,6 +128,5 @@
         }
       }
     }
-  },
-  "defaultProject": "gitlab-config"
+  }
 }
